@@ -1,60 +1,139 @@
-# Refactor a Sudoku Game written in Python Flask
+# Sudoku Web Game
 
-Use this simple Sudoku game as a starting point to practice your skills with GitHub Copilot. The goal is to refactor the code to use modern technologies, while also adding new features and improving the overall user experience.
+A browser-based Sudoku game built with Flask and vanilla JavaScript. Choose a difficulty, solve puzzles with optional hints, track your time, and save your best results in a local leaderboard.
 
-## Getting Started
+## Features
 
-Follow these instructions to get a copy of the project up and running on your local machine.
+- **Three difficulties:** Easy (45 starting clues), Medium (35), and Hard (25). Generated puzzles are checked to have exactly one solution.
+- **Interactive Sudoku board:** Immediate feedback for incorrect entries and rule conflicts. Original clues cannot be changed.
+- **Check and Hint:** Check the current board or reveal and lock one correct value. Hints used are counted for each game.
+- **Timer and completion:** The timer starts with a new game and stops when the puzzle is solved. The completion screen records time, difficulty, and hints used.
+- **Top 10 leaderboard:** Enter a name after solving a puzzle. Scores are sorted by completion time and saved in browser `localStorage`.
+- **Light and dark themes:** The selected theme is saved in browser `localStorage`.
+- **Responsive interface:** Designed for desktop and mobile, with keyboard-visible focus styles and accessible status messages.
 
-### Dependencies
+## Technologies
 
+- Python 3 and Flask for the web application and Sudoku routes.
+- HTML, CSS, and vanilla JavaScript for the interface and game interactions.
+- Browser `localStorage` for leaderboard scores and theme preference.
+- pytest for Python tests.
+- Node.js built-in test runner for the JavaScript leaderboard and theme tests (optional).
+
+## Project structure
+
+```text
+github-copilot-python/
+├── .github/
+├── .gitignore
+├── CODEOWNERS
+├── LICENSE.txt
+├── README.md
+└── starter/
+    ├── app.py
+    ├── requirements.txt
+    ├── requirements-dev.txt
+    ├── pytest.ini
+    ├── sudoku/
+    │   ├── __init__.py
+    │   ├── logic.py
+    │   └── routes.py
+    ├── static/
+    │   ├── main.js
+    │   ├── styles.css
+    │   ├── leaderboard.mjs
+    │   └── theme.mjs
+    ├── templates/
+    │   └── index.html
+    ├── tests/
+    │   ├── test_app.py
+    │   ├── test_sudoku_logic.py
+    │   ├── leaderboard.test.mjs
+    │   └── theme.test.mjs
+    └── Screenshots/
 ```
-- Modern web browser (Chrome, Firefox, Edge, etc.)
-- Python 3
+
+`starter/app.py` runs the Flask application. The `sudoku` package keeps puzzle logic separate from Flask routes. Static browser assets are in `static/`, and the page template is in `templates/`.
+
+## Installation and setup
+
+### 1. Get the project
+
+Clone the repository, then change into the application directory:
+
+```powershell
+git clone https://github.com/SurajP2002/github-copilot-python.git
+cd github-copilot-python\starter
 ```
 
-### Installation
+### 2. Create and activate a virtual environment
 
-1. Fork this repository to your GitHub account. (You can use the "Fork" button on the top right corner of the repository page.)
+On Windows PowerShell:
 
-2. Clone your forked repository to your local machine.
+```powershell
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
 
-3. Open a terminal window and navigate to the "github-copilot-python/starter" directory.
+If you use Windows Command Prompt instead, activate with:
 
-4. Create a Python virtual environment and activate it (optional but highly recommended).
+```cmd
+.venv\Scripts\activate.bat
+```
+
+On macOS or Linux:
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-5. Install required Python packages.
+### 3. Install dependencies
+
+From the `starter` directory, install the application dependencies:
 
 ```bash
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 ```
 
-6. Run the Flask app.
+To install pytest as well, use the development requirements file. It includes the application requirements:
+
+```bash
+python -m pip install -r requirements-dev.txt
+```
+
+## Run the application
+
+From the `starter` directory, with the virtual environment active:
 
 ```bash
 python app.py
 ```
 
-7. Open http://127.0.0.1:5000 in your browser.
+Open [http://127.0.0.1:5000](http://127.0.0.1:5000) in a browser. Stop the local server with **Ctrl+C** in the terminal.
 
-## Project Instructions
+## Run tests
 
-Use GitHub Copilot to refactor the code for this game to add more advanced features. The goal is to create a more modern and maintainable codebase and add additional functionality to the final product. You can use any combination of code completion and chat features, like Ask, Edit, or Agent modes.
+Install the development dependencies if you have not already, then run pytest from the `starter` directory:
 
-- Errors should be handled gracefully with appropriate messages to the user.
-- Implement a Sudoku board generator that creates a valid Sudoku puzzle with a unique solution.
-- Add a timer to track how long it takes to solve the puzzle.
-- Implement a solution checker that verifies if the user's solution is correct using event delegation.
-- Add a difficulty selector to allow users to choose between easy, medium, and hard puzzles.
-- Add a hint feature that provides clues for the user that are noted with unique colors.
-- Add a check puzzle button that checks the current state of the board against the solution.
-- User should get immediate feedback on their input, such as highlighting invalid entries.
-- Top 10 scores should be saved in local storage and displayed on the page with the user's name, time taken, hints used, and difficulty level.
-- The game should be responsive and work well on both desktop and mobile devices.
-- UI colors should be visually appealing and accessible.
-- Completed and correct puzzles should display a congratulatory message with the time taken and hints used and ask for the user's name for Top 10 times.
+```bash
+python -m pip install -r requirements-dev.txt
+python -m pytest -v
+```
+
+The Python tests in `tests/test_app.py` cover the Flask routes and page, while `tests/test_sudoku_logic.py` tests the Sudoku logic.
+
+Optional: if Node.js is installed, run the JavaScript tests for leaderboard and theme storage:
+
+```bash
+node --test tests/*.test.mjs
+```
+
+## Screenshots
+
+The [`starter/Screenshots/`](starter/Screenshots/) folder contains screenshots of the application and its features, including the final game interface, mobile layout, light and dark themes, difficulty selector, hints, and leaderboard. For example:
+
+- [Final game interface](starter/Screenshots/final_game_ui.png)
+- [Mobile layout](starter/Screenshots/mobile_view.png)
+- [Dark mode](starter/Screenshots/dark_mode.png)
+- [Leaderboard](starter/Screenshots/leaderboard.png)
