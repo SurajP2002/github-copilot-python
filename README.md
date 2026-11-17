@@ -123,9 +123,15 @@ python -m pytest -v
 
 The Python tests in `tests/test_app.py` cover the Flask routes and page, while `tests/test_sudoku_logic.py` tests the Sudoku logic.
 
-Optional: if Node.js is installed, run the JavaScript tests for leaderboard and theme storage:
+The Node.js tests cover the browser leaderboard and theme storage helpers. If Node.js and npm are installed, run them from the `starter` directory with:
 
-```bash
+```powershell
+npm test
+```
+
+The same tests can be run directly with Node:
+
+```powershell
 node --test tests/*.test.mjs
 ```
 

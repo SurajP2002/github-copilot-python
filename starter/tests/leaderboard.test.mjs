@@ -35,7 +35,7 @@ function createStorage(initialValue = null) {
   };
 }
 
-test('sorts scores by fastest time and preserves the first tied score', () => {
+test('sorts scores by fastest time and preserves ties with equal hints', () => {
   const scores = [
     createScore(90, {name: 'Slower'}),
     createScore(35, {name: 'First tied'}),
@@ -45,6 +45,19 @@ test('sorts scores by fastest time and preserves the first tied score', () => {
   assert.deepEqual(
     sortLeaderboard(scores).map(score => score.name),
     ['First tied', 'Second tied', 'Slower']
+  );
+});
+
+test('uses fewer hints to break completion-time ties', () => {
+  const scores = [
+    createScore(35, {name: 'More hints', hintsUsed: 2}),
+    createScore(20, {name: 'Fastest', hintsUsed: 8}),
+    createScore(35, {name: 'Fewer hints', hintsUsed: 0})
+  ];
+
+  assert.deepEqual(
+    sortLeaderboard(scores).map(score => score.name),
+    ['Fastest', 'Fewer hints', 'More hints']
   );
 });
 

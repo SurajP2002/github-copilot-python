@@ -47,6 +47,12 @@ def assert_valid_solution(board):
             assert box == expected
 
 
+def create_unsolvable_puzzle():
+    puzzle = [row[:] for row in UNIQUE_PUZZLE]
+    puzzle[0][2] = 1
+    return puzzle
+
+
 def test_create_empty_board_returns_independent_nine_by_nine_grid():
     board = sudoku_logic.create_empty_board()
 
@@ -158,6 +164,14 @@ def test_count_solutions_stops_at_limit_for_underconstrained_board():
     assert sudoku_logic.count_solutions(sudoku_logic.create_empty_board()) == 2
 
 
+def test_count_solutions_rejects_unsolvable_board_without_direct_conflicts():
+    unsolvable_puzzle = create_unsolvable_puzzle()
+
+    assert sudoku_logic.find_conflicts(unsolvable_puzzle) == []
+    assert sudoku_logic.count_solutions(unsolvable_puzzle) == 0
+    assert sudoku_logic.solve_board(unsolvable_puzzle) is None
+
+
 def test_count_solutions_rejects_conflicting_board():
     invalid_board = [row[:] for row in UNIQUE_SOLUTION]
     invalid_board[0][0] = invalid_board[0][1]
@@ -179,6 +193,21 @@ def test_remove_cells_preserves_unique_solution():
 
     assert sum(value != sudoku_logic.EMPTY for row in puzzle for value in row) == 80
     assert sudoku_logic.count_solutions(puzzle) == 1
+
+
+@pytest.mark.parametrize(
+    "puzzle",
+    [
+        pytest.param(create_unsolvable_puzzle(), id="no-solution"),
+        pytest.param(
+            sudoku_logic.create_empty_board(),
+            id="multiple-solutions",
+        ),
+    ],
+)
+def test_remove_cells_rejects_puzzles_without_exactly_one_solution(puzzle):
+    with pytest.raises(RuntimeError, match="unique puzzle"):
+        sudoku_logic.remove_cells([row[:] for row in puzzle], clues=81)
 
 
 def test_generate_puzzle_returns_requested_clues_and_valid_solution():

@@ -52,7 +52,10 @@ export function sortLeaderboard(scores) {
 
   return scores
     .map(validateScore)
-    .sort((first, second) => first.timeSeconds - second.timeSeconds)
+    .sort((first, second) =>
+      first.timeSeconds - second.timeSeconds ||
+      first.hintsUsed - second.hintsUsed
+    )
     .slice(0, MAX_LEADERBOARD_ENTRIES);
 }
 

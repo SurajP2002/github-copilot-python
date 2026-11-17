@@ -1,7 +1,20 @@
 import pytest
 
 import app as sudoku_app
+from sudoku import create_app
 from sudoku import logic as sudoku_logic
+
+
+def test_app_factory_registers_blueprint_and_isolates_game_state():
+    first_app = create_app()
+    second_app = create_app()
+    route_paths = {rule.rule for rule in first_app.url_map.iter_rules()}
+
+    assert "sudoku" in first_app.blueprints
+    assert {"/", "/new", "/check", "/validate", "/hint"} <= route_paths
+
+    first_app.config["CURRENT_GAME"]["solution"] = sudoku_logic.create_empty_board()
+    assert second_app.config["CURRENT_GAME"]["solution"] is None
 
 
 @pytest.fixture
